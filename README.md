@@ -22,7 +22,7 @@ You can install the latest version of `ZOBetaCopNet` from GitHub with:
 ```r
 install.packages("devtools")
 devtools::install_github("Kangyi0406/ZOBetaCopNet")
-
+```
 
 ## Documentation and Examples
 
@@ -30,6 +30,8 @@ Help documentation for the ZOBetaCopNet package is available in R. After install
 ``` r
 ?dzib
 ```
+
+
 
 The main function, `copnet` takes two data frames:
 
