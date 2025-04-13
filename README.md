@@ -21,7 +21,7 @@ You can install the latest version of `ZOBetaCopNet` from GitHub with:
 
 ```r
 install.packages("devtools")
-devtools::install_github("Kangyi0406/ZOBetaCopNet")
+devtools::install_github("Kangyi0406/scCoNet")
 ```
 
 ## Documentation and Examples
