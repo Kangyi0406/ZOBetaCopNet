@@ -17,7 +17,7 @@ Here, \(F_i\) and \(F_j\) denote the marginal distribution functions with mixtur
 
 ## Installation
 
-You can install the latest version of `ZOBetaCopNet` from GitHub with:
+You can install the latest version of `scCoNet` from GitHub with:
 
 ```r
 install.packages("devtools")
