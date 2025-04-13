@@ -1,4 +1,4 @@
-# `ZOBetaCopNet`: Frank Copulas with Zero-One Beta Mixture Margins for Covariation Networks
+# `scCoNet`: Frank Copulas with Zero-One Beta Mixture Margins for Covariation Networks
 
 <!-- badges: start -->
 <!-- badges: end -->
