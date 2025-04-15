@@ -8,7 +8,7 @@
 #' @export
 
 frank_theta_to_spearman <- function(theta) {
-  frankCopula <- archmCopula(family = "frank", param = theta)
-  spearman_rho <- rho(frankCopula)
+  frankCopula <- copula::archmCopula(family = "frank", param = theta)
+  spearman_rho <- copula::rho(frankCopula)
   return(spearman_rho)
 }

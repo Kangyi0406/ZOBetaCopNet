@@ -28,8 +28,6 @@ thetaTSMLE(x, lower, upper, p1, q1, alpha1, beta1, p2, q2, alpha2, beta2)
 \item{alpha2}{alpha parameter in beta distribution for x2.}
 
 \item{beta2}{beta parameter in beta distribution for x2.}
-
-\item{theta}{copula dependence parameter.}
 }
 \value{
 \code{thetaTSMLE} returns the two-stage estimate of \eqn{\theta}.

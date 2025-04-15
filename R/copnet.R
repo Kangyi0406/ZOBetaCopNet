@@ -9,19 +9,17 @@
 #' @return \code{copnet} returns the two-stage estimate of \eqn{\theta} the LR statistics and the p-value.
 #' @export
 #'
- 
 copnet = function(abd, covars = NULL, ncores = 1) {
-
   #covars = data.frame(covariates)
-  
-  
+
+
   if(!("data.frame"%in% class(abd))) {
     stop("ERROR: abd must be a data frame of relative abundances.")
   } else if(!is.null(covars) & !("data.frame" %in% class(covars))) {
     stop("ERROR: covars must be a data frame of covariates covariates for the marginal regression models.")
-  } 
-  
-  
+  }
+
+
   if(any(abd < 0) | any(abd > 1)) {
     stop("ERROR: the entries of abd must be relative abundances between [0,1].")
   } else if(is.null(covars) == FALSE ) {
@@ -29,13 +27,13 @@ copnet = function(abd, covars = NULL, ncores = 1) {
       stop("ERROR: the rownames of abd and covars must match and be in the same order.")
     }
   }
-  
-  
+
+
   if(ncores > 1){
     message("Setting up paralleization")
     future::plan(future::multisession, workers = ncores)
   }
-  
+
   #message("Fitting marginal models.")
   if(is.null(covars)){
     mMLE = furrr::future_map(colnames(abd),
@@ -56,7 +54,7 @@ copnet = function(abd, covars = NULL, ncores = 1) {
                              abd_mat = abd, vars = covars,
                              .progress = TRUE, .options = furrr::furrr_options(seed = T) )
   }
-  
+
 
   message("Estimating copula dependence parameters.")
   p1 = mMLE[[1]]$fitted$p
@@ -67,7 +65,7 @@ copnet = function(abd, covars = NULL, ncores = 1) {
   alpha2 = mMLE[[2]]$fitted$alpha
   beta1 = mMLE[[1]]$fitted$beta
   beta2 = mMLE[[2]]$fitted$beta
-  
+
 
   theta = thetaTSMLE(x = abd,
                      lower = -30,
@@ -80,10 +78,10 @@ copnet = function(abd, covars = NULL, ncores = 1) {
                      q2 = q2,
                      alpha2 = alpha2,
                      beta2 = beta2
-                     
+
   )
-  
-  
+
+
     message("Performing likelihood ratio tests.")
     lR.ts = lrtTheta(response = abd,
                      theta = theta,
@@ -96,7 +94,7 @@ copnet = function(abd, covars = NULL, ncores = 1) {
                      alpha2 = alpha2,
                      beta2 = beta2,
                      thetaNull = 0)
-    
+
 
   return(c(theta,lR.ts))
 }

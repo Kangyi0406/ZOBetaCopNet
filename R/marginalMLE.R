@@ -13,22 +13,34 @@
 #' \item{fitted}{data frame of fitted values for nu, tau, sigma, and mu.}
 #'
 #' @export
-
+#' 
 marginalMLE = function(formula.mu = ~ 1, formula.sigma = ~ 1, formula.nu = ~ 1, formula.tau = ~ 1, df = NULL){
   if(!("data.frame" %in% class(df))) {
     stop("ERROR: df must be a data frame of covariates for the marginal regression models.")
   }
-
+  #formula.mu = y~1; formula.sigma = ~ 1; formula.p = ~ 1; formula.tau = ~ 1
   # make inputted formula of class "formula"
   formula.mu = stats::as.formula(formula.mu)
   formula.sigma = stats::as.formula(formula.sigma)
   formula.nu = stats::as.formula(formula.nu)
   formula.tau = stats::as.formula(formula.tau)
-
-  model = gamlss::gamlss(formula = formula.mu, sigma.formula = formula.sigma, nu.fornula = formula.nu, formula.tau = formula.tau,
+  
+  # fit ZI-Beta regression model
+  # model = suppressWarnings( # suppress function warnings
+  #   gamlss::gamlss(formula = formula.mu, sigma.formula = formula.sigma, nu.formula = formula.p, formula.tau = formula.tau,
+  #                  family = gamlss.dist::BEINF, data = df,
+  #                  control = gamlss::gamlss.control(n.cyc = 40, trace=FALSE))
+  #   # gamlss.inf::gamlssInf0to1(Y = df[,"y"], mu.formula = formula.mu, sigma.formula = formula.sigma, xi0.formula = formula.p, xi1.formula = formula.tau,
+  #   #                family = gamlss.dist::BE, data = df,
+  #   #                control = gamlss::gamlss.control(n.cyc = 40, trace=FALSE))
+  #   
+  # )
+  model = gamlss::gamlss(formula = formula.mu, sigma.formula = formula.sigma, nu.formula = formula.nu, formula.tau = formula.tau,
                          family = gamlss.dist::BEINF, data = df,
                          control = gamlss::gamlss.control(n.cyc = 40, trace=FALSE))
-
+  # gamlss.inf::gamlssInf0to1(Y = df[,"y"], mu.formula = formula.mu, sigma.formula = formula.sigma, xi0.formula = formula.nu, xi1.formula = formula.tau,
+  #                family = gamlss.dist::BE, data = df,
+  #                control = gamlss::gamlss.control(n.cyc = 40, trace=FALSE))
   
   # Capture warnings
   warn <- warnings()
@@ -76,3 +88,4 @@ marginalMLE = function(formula.mu = ~ 1, formula.sigma = ~ 1, formula.nu = ~ 1, 
   
   return(out)
 }
+

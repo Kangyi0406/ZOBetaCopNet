@@ -1,5 +1,5 @@
-Package: ZOBetaCopulaCov
-Title: Copulas with Zero-One Beta Mixture Margins for Covariation Networks
+Package: scCoNet
+Title: Copulas with Zero-One Beta Mixture Margins for single cell co-expression Covariation Networks
 Version: 0.0.0.9000
 Authors@R: 
     person("Kangyi", "Zhao", email = "kaz78@pitt.edu", role = c("aut", "cre"))
@@ -18,7 +18,9 @@ Imports:
     parallel,
     foreach,
     doParallel,
-    doSNOW
+    doSNOW,
+    data.table,
+    progress
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2

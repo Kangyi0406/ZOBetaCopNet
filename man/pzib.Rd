@@ -9,13 +9,13 @@ pzib(x, p, q, alpha, beta)
 \arguments{
 \item{x}{vector of quantiles.}
 
+\item{p}{vector of zero-inflation probabilities.}
+
+\item{q}{vector of one-inflation probabilities.}
+
 \item{alpha}{vector of alpha in beta distribution}
 
 \item{beta}{vector of beta in beta distribution}
-
-\item{nu}{vector of zero-inflation probabilities.}
-
-\item{tau}{vector of one-inflation probabilities.}
 }
 \value{
 \code{pzib} returns the distribution function.

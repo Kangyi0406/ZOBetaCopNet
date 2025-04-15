@@ -12,18 +12,18 @@
 #'
 #' @examples
 #' frankCopula(u = 0.35, v = 0.5, theta = 2)
-#' 
+#'
 frankCopula = function(u, v, theta){
-  if(class(u)!="numeric" | all(u >= 0) == FALSE | all(u <= 1) == FALSE) {
+  if (!is.numeric(u) || !all(u >= 0) || !all(u <= 1)) {
     stop("ERROR: u must be a numeric vector of Uniform(0,1) random variables.")
-  } else if(class(v) !="numeric" | all(v >= 0) == FALSE | all(v <= 1) == FALSE) {
+  } else if (!is.numeric(v) || !all(v >= 0) || !all(v <= 1)) {
     stop("ERROR: v must be a numeric vector of Uniform(0,1) random variables.")
-  } else if(class(theta) !="numeric") {
+  } else if (!is.numeric(theta)) {
     stop("ERROR: theta must be a numeric variable.")
   }
   a = exp(-theta)
-  
+
   Cuv = (-1/theta)*as.numeric(log(1 + (((a^u - 1) * (a^v - 1))/(a - 1))))
-  
+
   return(Cuv)
 }

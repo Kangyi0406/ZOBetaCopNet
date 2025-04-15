@@ -13,13 +13,12 @@
 #' @param q2 one-inflation probability for x2.
 #' @param alpha2 alpha parameter in beta distribution for x2.
 #' @param beta2 beta parameter in beta distribution for x2.
-#' @param theta copula dependence parameter.
 #'
 
 #' @return \code{thetaTSMLE} returns the two-stage estimate of \eqn{\theta}.
 #'
 #' @export
-#' 
+#'
 thetaTSMLE <- function(x, lower, upper, p1, q1, alpha1, beta1, p2, q2, alpha2, beta2) {
   # x = abd
   # lower = -30
@@ -42,12 +41,12 @@ thetaTSMLE <- function(x, lower, upper, p1, q1, alpha1, beta1, p2, q2, alpha2, b
     ll <- -sum(log(density_final))
     #print(ll)
   }
-  
+
   # Numerical analysis to find MLE of theta
   #thetaTSML <- optimize(f, c(lower, upper), maximum = TRUE)[1]
-  thetaTSML <- optim(par = 0, fn = f, 
+  thetaTSML <- stats::optim(par = 0, fn = f,
                      method = "Brent", lower = lower, upper = upper)[1]
-  
-  
+
+
   return(as.numeric(thetaTSML))
 }

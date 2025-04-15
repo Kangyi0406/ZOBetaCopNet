@@ -15,8 +15,7 @@ bivariateDensityZOIB(
   q2,
   alpha2,
   beta2,
-  theta,
-  prec = 200
+  theta
 )
 }
 \arguments{
