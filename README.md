@@ -26,9 +26,9 @@ devtools::install_github("Kangyi0406/scCoNet")
 
 ## Documentation and Examples
 
-Help documentation for the ZOBetaCopNet package is available in R. After installing the package from GitHub via devtools and loading it with library(), you can access the documentation for any function using ?. For example:
+Help documentation for the scCoNet package is available in R. After installing the package from GitHub via devtools and loading it with library(), you can access the documentation for any function using ?. For example:
 ``` r
-?dzib
+?scCoNet
 ```
 
 
