@@ -11,9 +11,6 @@
 #' @return \code{pzib} returns the distribution function.
 #'
 #' @export
-#'
-#' @examples
-#' pzib(x = 0.8, p = 0.2, q=0.3, alpha = 2, beta = 3)
 
 pzib = function(x, p, q, alpha, beta){
 

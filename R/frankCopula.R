@@ -8,10 +8,8 @@
 #'
 #' @return \code{frankCopula} returns the frank copula distribution function.
 #'
-#' @export
 #'
-#' @examples
-#' frankCopula(u = 0.35, v = 0.5, theta = 2)
+#' @export
 #'
 frankCopula = function(u, v, theta){
   if (!is.numeric(u) || !all(u >= 0) || !all(u <= 1)) {

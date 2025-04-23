@@ -1,37 +1,34 @@
-
-#' Large Data get the MLE of marginal parameter and get the estimate
+#' Estimate Marginal Parameters and Network Connections for Large-Scale Data
 #'
-#' Get the MLE of marginal parameter for the Large Dataset and save it and then estimate the parameter
+#' This function computes the maximum likelihood estimates (MLEs) of marginal parameters for each feature in a large dataset, optionally adjusting for covariates. It supports parallel computation and stores the estimated parameters. Subsequently, pairwise associations between features are quantified using likelihood ratio tests, returning both the test statistics and significance indicators.
 #'
-#'
-#' @param abd data frame of microbial relative abundances. Rows are samples and columns are taxa.
-#' @param covars data frame of covariates to adjust for in the marginal regression models. Rows should be in the same order as \code{abd} and rownames should match.
-#' @param ncores number of cores for parallelization. Default value is 1 (no parallel computing).
-#' @param wd_Marginal working directory file name for saving the rds file related to marginal MLE parameter, the default is NULL
-#' @param wd_estimate working directory file name for saving the rds file related to copula estimator and p-value,, the default is NULL
-#' @param formula.sigma an object of class formula: a symbolic description of the model to be fitted for the beta dispersion parameter.
-#' @param formula.mu an object of class formula: a symbolic description of the model to be fitted for the beta mean parameter.
-#' @param formula.nu an object of class formula: a symbolic description of the model to be fitted for the zero-one inflation probability parameter.
-#' @param formula.tau an object of class formula: a symbolic description of the model to be fitted for the zero-one inflation probability parameter.
-#' @param sig_level the significant level for select the connection based on the B-H adjusted p-value, defualt is 0.05.
-#' @param sig_connect the argument for whether only return the significant connection or not. The default value is FALSE, it return all the connections.
-#'
-#' @return \code{scCoNet} returns dataframe (Column 1 index, Column 2 index, estimated theta, transformed spearman, LR statistic, p-value, p-value after B-H adjustment)
+#' @param data A data frame where rows represent samples and columns represent features (e.g., genes).
+#' @param covars A data frame of covariates used to adjust the marginal models. Row order must match that of \code{data}, and row names should correspond to sample identifiers.
+#' @param ncores Integer. Number of cores to use for parallel computation. Default is 1 (no parallelization).
+#' @param formula.mu A formula specifying the model for the beta distribution's mean (\eqn{\mu}) parameter. Default is \code{y ~ 1}, indicating no covariates.
+#' @param formula.sigma A formula specifying the model for the beta distribution's dispersion (\eqn{\sigma}) parameter. Default is \code{y ~ 1}.
+#' @param formula.nu A formula specifying the model for the zero-one inflation parameter (\eqn{\nu}). Default is \code{y ~ 1}.
+#' @param formula.tau A formula specifying the model for the complementary zero-one inflation parameter (\eqn{\tau}). Default is \code{y ~ 1}.
+#' @param sig_level Numeric. Significance threshold (after Benjamini–Hochberg adjustment) used to determine which associations are retained. Default is 0.05.
+#' @param sig_connect Logical. If \code{TRUE}, only statistically significant associations are returned; otherwise, all estimated connections are included. Default is \code{FALSE}.
 #' @import progress
 #' @import doParallel
 #' @import foreach
 #' @import progress
+#' @return A list containing two elements:
+#'   \code{marginal_parameter}{A list of estimated marginal parameters for each feature. Each entry is a matrix with columns \code{q}, \code{p}, \code{alpha}, and \code{beta}.
+#'   \code{data_frame}{A data frame summarizing two-stage estimated theta and the testing. Columns include: feature indices, estimated theta, transformed Spearman correlation, likelihood ratio statistic, raw p-value, BH-adjusted p-value, and significance indicator.
 #' @examples
-#' cell_type = "Inh
-#' data <- as.data.frame(readRDS(paste0("/storage/Network_data/data_combine/beta_protein/beta_",cell_type,"_use.rds")))[,1:10]
-#' cov = as.data.frame(readRDS(paste0("/storage/Network_data/data_combine/cell_cov/cov_",cell_type,".rds")))
+#' data(gene_data)
+#' data = gene_data$gen_data
+#' cov = gene_data$cov
 #' cov$name_data = factor(cov$name_data)
 #' cov$year = as.numeric(cov$year)
-#' scCoNet(data[,1:5],covars= data.frame(cov[,2:3]), ncores = 2, formula.mu = y~name_data+year)
+#' result = scCoNet(data,covars= data.frame(cov[,2:3]), ncores = 1, formula.mu = y~name_data+year,formula.sigma = y~name_data+year, formula.nu = y~name_data+year)
 #' @export
 
-scCoNet = function(abd, covars=NULL, ncores = 1, sig_level = 0.05, sig_connect = FALSE, wd_Marginal=NULL, wd_estimate= NULL, formula.mu = y~1, formula.sigma = ~1, formula.nu = ~ 1, formula.tau = ~ 1){
-  data =  as.data.frame(abd)
+scCoNet = function(data, covars=NULL, ncores = 1, sig_level = 0.05, sig_connect = FALSE, formula.mu = y~1, formula.sigma = ~1, formula.nu = ~ 1, formula.tau = ~ 1){
+  data =  as.data.frame(data)
   results = list()
   if (is.null(covars)){
     get_marginal <- function(x){
@@ -43,10 +40,6 @@ scCoNet = function(abd, covars=NULL, ncores = 1, sig_level = 0.05, sig_connect =
     for(i in 1:dim(data)[2]){
       results[[i]] = get_marginal(data[,i])
       #print(i)
-    }
-    if(!is.null(wd_Marginal)){
-      saveRDS(results, wd_Marginal)
-      cat("All columns of Marginal MLE processed and results saved.\n")
     }
     cat("All columns of Marginal MLE processed.\n")
 
@@ -63,10 +56,6 @@ scCoNet = function(abd, covars=NULL, ncores = 1, sig_level = 0.05, sig_connect =
     for(i in 1:dim(data)[2]){
       results[[i]] = get_marginal(data[,i])
       #print(i)
-    }
-    if(!is.null(wd_Marginal)){
-      saveRDS(results, wd_Marginal)
-      cat("All columns of Marginal MLE processed and results saved.\n")
     }
     cat("All columns of Marginal MLE processed.\n")
 
@@ -132,6 +121,23 @@ scCoNet = function(abd, covars=NULL, ncores = 1, sig_level = 0.05, sig_connect =
   # Process each chunk
 
   # Set up cluster for this chunk
+  if(ncores==1){
+    results_theta = data.frame(do.call(rbind,lapply( all_pairs, compute_theta, results =  results, data = data)))
+    colnames(results_theta) = c("Column1", "Column2", "Copula","Copula_Spearman", "Test_Statistics","Copula_P_value")
+    results_theta = data.frame(results_theta)
+    results_theta$Adjusted_P_copula <- stats::p.adjust(results_theta$Copula_P_value, method = "BH")
+    results_theta$Significant_copula <- results_theta$Adjusted_P_copula < sig_level
+
+    if(sig_connect){
+      results_theta = results_theta[results_theta$Significant_copula ==1,]
+    }
+    return(list(marginal_parameter = results, data_frame=results_theta))
+
+  }
+
+
+  ###multi-cores situation
+
   cl <- parallel::makeCluster(ncores, type = "SOCK")
   doSNOW::registerDoSNOW(cl)
   # Export required data and objects to all workers
@@ -161,7 +167,6 @@ scCoNet = function(abd, covars=NULL, ncores = 1, sig_level = 0.05, sig_connect =
                            .multicombine = TRUE) %dopar% {
                              compute_theta(pair, results =  results, data = data)
                            }
-  print(results_theta)
 
   colnames(results_theta) = c("Column1", "Column2", "Copula","Copula_Spearman", "Test_Statistics","Copula_P_value")
   results_theta = data.frame(results_theta)
@@ -173,14 +178,9 @@ scCoNet = function(abd, covars=NULL, ncores = 1, sig_level = 0.05, sig_connect =
   }
 
     # Stop the cluster
-    # Save results for this chunk
-    if(is.null(wd_estimate)){
-      return(results_theta)
-    }
-    saveRDS(results_theta, wd_estimate)
-    parallel::stopCluster(cl)
+  return(list(marginal_parameter = results, data_frame=results_theta))
+  parallel::stopCluster(cl)
 
-    message("All estimations processed and saved.\n")
 
 
 }

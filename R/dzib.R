@@ -10,10 +10,9 @@
 #'
 #' @return \code{dzib} returns the density.
 #'
-#' @export
 #'
-#' @examples
-#' dzib(x = 0.8, p = 0.2, q=0.3, alpha = 2, beta = 3)
+#' @export
+
 dzib = function(x, p, q, alpha, beta){
   if (!is.numeric(x) || !all(x >= 0) || !all(x <= 1)) {
     stop("ERROR: x must be a numeric vector of zero-inflated beta random variables with range [0,1].")

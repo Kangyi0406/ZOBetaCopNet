@@ -9,12 +9,7 @@
 #' @return \code{frankConditionalV} returns the frank conditional copula distribution function, conditional on v.
 #'
 #' @export
-#'
-#' @examples
-#' frankConditionalV(u = 0.35, v = 0.5, theta = 2)
-#'
 
-#' frankConditionalV(u = 0.35, v = 0.5, theta = 2)
 frankConditionalV = function(u, v, theta){
   if (!is.numeric(u) || !all(u >= 0) || !all(u <= 1)) {
     stop("ERROR: u must be a numeric vector of Uniform(0,1) random variables.")

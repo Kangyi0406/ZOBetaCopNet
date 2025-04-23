@@ -9,9 +9,6 @@
 #' @return \code{frankDensity} returns the frank copula density function.
 #'
 #' @export
-#'
-#' @examples
-#' frankDensity(u = 0.35, v = 0.5, theta = 2)
 
 frankDensity = function(u, v, theta){
   if (!is.numeric(u) || !all(u >= 0) || !all(u <= 1)) {

@@ -9,10 +9,8 @@
 #'
 #' @return \code{frankConditionalU} returns the frank conditional copula distribution function, conditional on u.
 #'
-#' @export
 #'
-#' @examples
-#' frankConditionalU(u = 0.35, v = 0.5, theta = 2)
+#' @export
 #'
 frankConditionalU = function(u, v, theta){
   if (!is.numeric(u) || !all(u >= 0) || !all(u <= 1)) {
