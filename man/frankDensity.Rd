@@ -19,6 +19,3 @@ frankDensity(u, v, theta)
 \description{
 Frank copula density function.
 }
-\examples{
-frankDensity(u = 0.35, v = 0.5, theta = 2)
-}

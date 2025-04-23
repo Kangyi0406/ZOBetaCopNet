@@ -19,7 +19,3 @@ frankCopula(u, v, theta)
 \description{
 Frank copula function.
 }
-\examples{
-frankCopula(u = 0.35, v = 0.5, theta = 2)
-
-}

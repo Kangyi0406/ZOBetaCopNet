@@ -23,6 +23,3 @@ pzib(x, p, q, alpha, beta)
 \description{
 Distribution function for the zero-one-inflated beta distribution with zero-one-inflation probability equal to \code{p}, one-inflation probability equal to \code{q}, beta distribution alpha equal to \code{alpha} and beta distribution beta equal to \code{beta}.
 }
-\examples{
-pzib(x = 0.8, p = 0.2, q=0.3, alpha = 2, beta = 3)
-}

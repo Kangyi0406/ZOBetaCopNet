@@ -19,7 +19,3 @@ frankConditionalU(u, v, theta)
 \description{
 Frank conditional copula function.
 }
-\examples{
-frankConditionalU(u = 0.35, v = 0.5, theta = 2)
-
-}

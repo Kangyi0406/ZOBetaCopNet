@@ -21,7 +21,7 @@ marginalMLE(
 
 \item{formula.tau}{an object of class formula: a symbolic description of the model to be fitted for the zero-one inflation probability parameter.}
 
-\item{df}{data frame of outcomes and covariates.}
+\item{df}{data frame of outcomes and covariates.(y, covariate1, covariate2, ...)}
 }
 \value{
 \code{marginalMLE} returns a list of the following elements:

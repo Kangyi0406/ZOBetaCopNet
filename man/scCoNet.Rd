@@ -2,16 +2,14 @@
 % Please edit documentation in R/scCoNet.R
 \name{scCoNet}
 \alias{scCoNet}
-\title{Large Data get the MLE of marginal parameter and get the estimate}
+\title{Estimate Marginal Parameters and Network Connections for Large-Scale Data}
 \usage{
 scCoNet(
-  abd,
+  data,
   covars = NULL,
   ncores = 1,
   sig_level = 0.05,
   sig_connect = FALSE,
-  wd_Marginal = NULL,
-  wd_estimate = NULL,
   formula.mu = y ~ 1,
   formula.sigma = ~1,
   formula.nu = ~1,
@@ -19,31 +17,38 @@ scCoNet(
 )
 }
 \arguments{
-\item{abd}{data frame of microbial relative abundances. Rows are samples and columns are taxa.}
+\item{data}{A data frame where rows represent samples and columns represent features (e.g., genes).}
 
-\item{covars}{data frame of covariates to adjust for in the marginal regression models. Rows should be in the same order as \code{abd} and rownames should match.}
+\item{covars}{A data frame of covariates used to adjust the marginal models. Row order must match that of \code{data}, and row names should correspond to sample identifiers.}
 
-\item{ncores}{number of cores for parallelization. Default value is 1 (no parallel computing).}
+\item{ncores}{Integer. Number of cores to use for parallel computation. Default is 1 (no parallelization).}
 
-\item{sig_level}{the significant level for select the connection based on the B-H adjusted p-value, defualt is 0.05.}
+\item{sig_level}{Numeric. Significance threshold (after Benjamini–Hochberg adjustment) used to determine which associations are retained. Default is 0.05.}
 
-\item{sig_connect}{the argument for whether only return the significant connection or not. The default value is FALSE, it return all the connections.}
+\item{sig_connect}{Logical. If \code{TRUE}, only statistically significant associations are returned; otherwise, all estimated connections are included. Default is \code{FALSE}.}
 
-\item{wd_Marginal}{working directory file name for saving the rds file related to marginal MLE parameter, the default is NULL}
+\item{formula.mu}{A formula specifying the model for the beta distribution's mean (\eqn{\mu}) parameter. Default is \code{y ~ 1}, indicating no covariates.}
 
-\item{wd_estimate}{working directory file name for saving the rds file related to copula estimator and p-value,, the default is NULL}
+\item{formula.sigma}{A formula specifying the model for the beta distribution's dispersion (\eqn{\sigma}) parameter. Default is \code{y ~ 1}.}
 
-\item{formula.mu}{an object of class formula: a symbolic description of the model to be fitted for the beta mean parameter.}
+\item{formula.nu}{A formula specifying the model for the zero-one inflation parameter (\eqn{\nu}). Default is \code{y ~ 1}.}
 
-\item{formula.sigma}{an object of class formula: a symbolic description of the model to be fitted for the beta dispersion parameter.}
-
-\item{formula.nu}{an object of class formula: a symbolic description of the model to be fitted for the zero-one inflation probability parameter.}
-
-\item{formula.tau}{an object of class formula: a symbolic description of the model to be fitted for the zero-one inflation probability parameter.}
+\item{formula.tau}{A formula specifying the model for the complementary zero-one inflation parameter (\eqn{\tau}). Default is \code{y ~ 1}.}
 }
 \value{
-\code{scCoNet} returns dataframe (Column 1 index, Column 2 index, estimated theta, transformed spearman, LR statistic, p-value, p-value after B-H adjustment)
+A list containing two elements:
+\code{marginal_parameter}{A list of estimated marginal parameters for each feature. Each entry is a matrix with columns \code{q}, \code{p}, \code{alpha}, and \code{beta}.
+\code{data_frame}{A data frame summarizing two-stage estimated theta and the testing. Columns include: feature indices, estimated theta, transformed Spearman correlation, likelihood ratio statistic, raw p-value, BH-adjusted p-value, and significance indicator.
+}
 }
 \description{
-Get the MLE of marginal parameter for the Large Dataset and save it and then estimate the parameter
+This function computes the maximum likelihood estimates (MLEs) of marginal parameters for each feature in a large dataset, optionally adjusting for covariates. It supports parallel computation and stores the estimated parameters. Subsequently, pairwise associations between features are quantified using likelihood ratio tests, returning both the test statistics and significance indicators.
+}
+\examples{
+data(gene_data)
+data = gene_data$gen_data
+cov = gene_data$cov
+cov$name_data = factor(cov$name_data)
+cov$year = as.numeric(cov$year)
+result = scCoNet(data,covars= data.frame(cov[,2:3]), ncores = 1, formula.mu = y~name_data+year,formula.sigma = y~name_data+year, formula.nu = y~name_data+year)
 }
