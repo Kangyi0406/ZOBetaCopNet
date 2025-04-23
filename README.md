@@ -18,7 +18,7 @@ $$
 where:
 
 - $F_i$ and $F_j$ represent the marginal distribution functions with mixture margins.
-- $theta_{ij}$ is the copula dependence parameter that captures the covariation between the two features.
+- $\theta_{ij}$ is the copula dependence parameter that captures the covariation between the two features.
 
 This model allows the estimation of dependence parameters that serve as the basis for constructing co-expression covariation networks.
 
