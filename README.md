@@ -1,4 +1,4 @@
-# `scCoNet`: Frank Copulas with Zero-One Beta Mixture Margins for Single-Cell Co-expression Covariation Networks
+# `scCoNet`: Frank Copulas with Zero-One Beta Mixture Margins for Single-Cell Covariation Networks
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -20,7 +20,7 @@ where:
 - $F_i$ and $F_j$ represent the marginal distribution functions with mixture margins.
 - $\theta_{ij}$ is the copula dependence parameter that captures the covariation between the two features.
 
-This model allows the estimation of dependence parameters that serve as the basis for constructing co-expression covariation networks.
+This model allows the estimation of dependence parameters that serve as the basis for constructing covariation networks.
 
 
 ## Installation
