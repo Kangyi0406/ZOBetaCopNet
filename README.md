@@ -45,10 +45,11 @@ library("scCoNet")
 
 ```{r}
 # Load your data (gene values for each cell or feature)
-data <- data.frame(readRDS("path/to/data.rds"))
+data(gene_data)
+data <- gene_data$gen_data
 
 # Load covariates (e.g., experimental conditions or other metadata)
-cov <- as.data.frame(readRDS("path/to/covariates.rds"))
+cov <- gene_data$cov_data
 cov$name_data <- factor(cov$name_data)
 cov$year <- as.numeric(cov$year)
 cov <- cov[, 2:3]  # Select the necessary columns
@@ -57,7 +58,7 @@ cov <- cov[, 2:3]  # Select the necessary columns
 result <- scCoNet(
   data,
   covars = data.frame(cov),
-  ncores = 2,
+  ncores = 1,
   formula.mu = y ~ name_data + year,
   formula.sigma = y ~ name_data + year,
   formula.nu = y ~ name_data + year,
@@ -84,4 +85,3 @@ result <- scCoNet(
 
 For bug reports, issues, or suggestions, please contact the maintainer:
  Kangyi Zhao via [email](mailto:kaz78@pitt.edu).
-
