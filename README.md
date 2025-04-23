@@ -1,11 +1,11 @@
-# `scCoNet`: Frank Copulas with Zero-One Beta Mixture Margins for Single-Cell Covariation Networks
+# `scCoNet`: Copulas with Zero-One Beta Mixture Margins for Single-Cell Covariation Networks
 
 <!-- badges: start -->
 <!-- badges: end -->
 
 ## About
 
-`scCoNet` is an R package for modeling zero-one-inflated proportion data using Frank copula models with mixture margins. It implements a two-stage maximum likelihood estimation (tsMLE) procedure and a two-stage likelihood ratio test (tsLRT) for estimating the copula dependence parameter, which can then be used to build co-expression covariation networks.
+`scCoNet` is an R package for modeling zero-one-inflated proportion data using Frank copula models with mixture margins. It implements a two-stage maximum likelihood estimation (tsMLE) procedure and a two-stage likelihood ratio test (tsLRT) for estimating the copula dependence parameter, which can then be used to build covariation networks.
 
 
 `scCoNet` uses a mixture margin copula model for pairs of zero-one-inflated beta distributions for gene data $(X_i, X_j)$:
